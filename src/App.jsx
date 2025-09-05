@@ -9,12 +9,12 @@ import axios from 'axios'
 import './App.css'
 
 function App() {
-  const [ count, setCount ] = useState(0)
-  const [ code, setCode ] = useState(` function sum() {
+  const [count, setCount] = useState(0)
+  const [code, setCode] = useState(`function sum() {
   return 1 + 1
 }`)
 
-  const [ review, setReview ] = useState(``)
+  const [review, setReview] = useState(``)
 
   useEffect(() => {
     prism.highlightAll()
@@ -23,13 +23,14 @@ function App() {
   async function reviewCode() {
     try {
       const response = await axios.post(
-        'https://mern-backend-production-248c.up.railway.app/ai/get-review',
+        'https://mern-backend-git-main-iram-shahzadiis-projects.vercel.app/api/get-review', // ✅ Vercel backend URL
         { prompt: code }
       )
       setReview(response.data.review) // backend ka response
     } catch (err) {
       console.error("Axios error:", err.response?.data || err.message)
       console.log("Sending to backend:", { prompt: code })
+      alert("Error communicating with backend. Check console for details.")
     }
   }
 
@@ -59,8 +60,10 @@ function App() {
         </div>
         <div className="right">
           <Markdown
-            rehypePlugins={[ rehypeHighlight ]}
-          >{review}</Markdown>
+            rehypePlugins={[rehypeHighlight]}
+          >
+            {review}
+          </Markdown>
         </div>
       </main>
     </>
