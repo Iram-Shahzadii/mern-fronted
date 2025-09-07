@@ -9,7 +9,6 @@ import axios from 'axios'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
   const [code, setCode] = useState(`function sum() {
   return 1 + 1
 }`)
@@ -23,14 +22,14 @@ function App() {
   async function reviewCode() {
     try {
       const response = await axios.post(
-        'https://mern-backend-git-main-iram-shahzadiis-projects.vercel.app/api/get-review', // ✅ Vercel backend URL
-        { prompt: code }
+        'https://mern-backend-production-248c.up.railway.app/ai/get-review',
+        { code }
       )
-      setReview(response.data.review) // backend ka response
+      // backend se response aata hai: { success: true, data: "..." }
+      setReview(response.data.data)
     } catch (err) {
-      console.error("Axios error:", err.response?.data || err.message)
-      console.log("Sending to backend:", { prompt: code })
-      alert("Error communicating with backend. Check console for details.")
+      console.error("❌ Error while fetching review:", err)
+      setReview("Failed to get review. Please try again.")
     }
   }
 
@@ -59,9 +58,7 @@ function App() {
             className="review">Review</div>
         </div>
         <div className="right">
-          <Markdown
-            rehypePlugins={[rehypeHighlight]}
-          >
+          <Markdown rehypePlugins={[rehypeHighlight]}>
             {review}
           </Markdown>
         </div>
